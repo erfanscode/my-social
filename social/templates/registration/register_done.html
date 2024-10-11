@@ -1,0 +1,9 @@
+{% extends 'parent/base.html' %}
+{% block title %}Register Done{% endblock %}
+
+{% block content %}
+
+<p>عزیز ثبت نام شما با موفقیت انجام شد {{ user.first_name }}</p>
+<a href="{% url 'social:login' %}">ورود به سایت</a>
+
+{% endblock %}
