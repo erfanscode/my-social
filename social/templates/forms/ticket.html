@@ -1,0 +1,16 @@
+{% extends 'parent/base.html' %}
+{% block title %}Ticket{% endblock %}
+
+{% block content %}
+
+    {% if sent %}
+    	<h4>تیکت شما با موفقیت ارسال شد</h4>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="ارسال">
+    </form>
+
+{% endblock %}

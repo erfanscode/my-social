@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect
 from django.http.response import HttpResponse
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.conf import settings
 
-from social.forms import UserRegistrationForm, UserEditForm
+from social.forms import UserRegistrationForm, UserEditForm, TicketForm
 
 
 def index(request):
@@ -25,6 +27,7 @@ def register(request):
         form = UserRegistrationForm()
     return render(request, 'registration/register.html', {'form': form})
 
+@login_required
 def edit_user(request):
     if request.method == "POST":
         user_form = UserEditForm(data=request.POST, instance=request.user, files=request.FILES)
@@ -34,3 +37,22 @@ def edit_user(request):
     else:
         user_form = UserEditForm(instance=request.user)
     return render(request, 'registration/edit_user.html', {'user_form': user_form})
+
+def ticket(request):
+    # view for send ticket to mail
+    sent = False
+    if request.method == 'POST':
+        form = TicketForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            message = f"{cd['name']}\n{cd['email']}\n{cd['phone']}\n\n{cd['message']}"
+            send_mail(
+                cd['subject'],
+                message, settings.EMAIL_HOST_USER,
+                ['djangotestmenow@gmail.com'],
+                fail_silently=False
+            )
+            sent = True
+    else:
+        form = TicketForm()
+    return render(request, 'forms/ticket.html', {"form": form, "sent": sent})
