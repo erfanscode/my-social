@@ -10,3 +10,10 @@ class UserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
         ('Additional Information', {'fields': ('date_of_birth', 'bio', 'photo', 'job', 'phone')}),
     )
+
+
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
+    # Show user posts
+    list_display = ['description', 'create']
+    search_fields = ['description']
