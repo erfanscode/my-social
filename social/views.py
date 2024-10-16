@@ -6,6 +6,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 from social.forms import UserRegistrationForm, UserEditForm, TicketForm
+from social.models import Post
 
 
 def index(request):
@@ -56,3 +57,8 @@ def ticket(request):
     else:
         form = TicketForm()
     return render(request, 'forms/ticket.html', {"form": form, "sent": sent})
+
+def post_list(request):
+    # view for show list posts
+    posts = Post.objects.all()
+    return render(request, 'social/list.html', {'posts': posts})
