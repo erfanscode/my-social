@@ -5,8 +5,9 @@
 
     {% for post in posts %}
         <p>{{ post.description|truncatewords:10|linebreaks }}</p>
+        <p>در تاریخ {{ post.create }} توسط {{ post.author }} منتشر شد</p>
+        <small>{{ post.tags.all|join:', '}}</small>
         <br>
-        <small>در تاریخ {{ post.create }} توسط {{ post.author }} منتشر شد</small>
     {% endfor %}
 
 {% endblock %}
