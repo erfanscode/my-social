@@ -6,7 +6,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from taggit.models import Tag
 
-from social.forms import UserRegistrationForm, UserEditForm, TicketForm
+from social.forms import UserRegistrationForm, UserEditForm, TicketForm, CreatePostForm
 from social.models import Post
 
 
@@ -71,3 +71,17 @@ def post_list(request, tag_slug=None):
         'tag': tag,
     }
     return render(request, 'social/list.html', context)
+
+def create_post(request):
+    # view for create post form
+    if request.method == "POST":
+        form = CreatePostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            form.save_m2m()
+            return redirect('social:post_list')
+    else:
+        form = CreatePostForm()
+    return render(request, 'forms/create_post.html', {"form": form})
