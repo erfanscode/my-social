@@ -76,3 +76,9 @@ class TicketForm(forms.Form):
                 raise forms.ValidationError('شماره تلفن باید عدد باشد')
             else:
                 return phone
+
+
+class CreatePostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['description', 'tags']
