@@ -72,6 +72,7 @@ def post_list(request, tag_slug=None):
     }
     return render(request, 'social/list.html', context)
 
+@login_required
 def create_post(request):
     # view for create post form
     if request.method == "POST":
