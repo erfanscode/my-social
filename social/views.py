@@ -4,6 +4,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.conf import settings
+from taggit.models import Tag
 
 from social.forms import UserRegistrationForm, UserEditForm, TicketForm
 from social.models import Post
@@ -58,7 +59,15 @@ def ticket(request):
         form = TicketForm()
     return render(request, 'forms/ticket.html', {"form": form, "sent": sent})
 
-def post_list(request):
+def post_list(request, tag_slug=None):
     # view for show list posts
     posts = Post.objects.all()
-    return render(request, 'social/list.html', {'posts': posts})
+    tag = None
+    if tag_slug:
+        tag = Tag.objects.get(slug=tag_slug)
+        posts = Post.objects.filter(tags__in=[tag])
+    context = {
+        'posts': posts,
+        'tag': tag,
+    }
+    return render(request, 'social/list.html', context)
