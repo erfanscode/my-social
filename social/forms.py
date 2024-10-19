@@ -79,6 +79,11 @@ class TicketForm(forms.Form):
 
 
 class CreatePostForm(forms.ModelForm):
+    # form for create post
     class Meta:
         model = Post
         fields = ['description', 'tags']
+
+
+class SearchForm(forms.Form):
+    query = forms.CharField()
