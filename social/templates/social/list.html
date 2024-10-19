@@ -8,7 +8,7 @@
     {% endif %}
 
     {% for post in posts %}
-        <p>{{ post.description|truncatewords:10|linebreaks }}</p>
+        <a href="{{ post.get_absolute_url }}">{{ post.description|truncatewords:10|linebreaks }}</a>
         <p>در تاریخ {{ post.create }} توسط {{ post.author }} منتشر شد</p>
         {% for tag in post.tags.all %}
             <a href="{% url 'social:post_list_by_tag' tag.slug %}">{{ tag.name }}</a>

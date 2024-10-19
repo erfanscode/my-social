@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http.response import HttpResponse
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.conf import settings
 from taggit.models import Tag
+from django.db.models import Count
 
 from social.forms import UserRegistrationForm, UserEditForm, TicketForm, CreatePostForm
 from social.models import Post
@@ -86,3 +87,15 @@ def create_post(request):
     else:
         form = CreatePostForm()
     return render(request, 'forms/create_post.html', {"form": form})
+
+def post_detail(request, pk):
+    # show detail post and similar posts
+    post = get_object_or_404(Post, id=pk)
+    post_tags_ids = post.tags.values_list('id', flat=True)
+    similar_post = Post.objects.filter(tags__in=post_tags_ids).exclude(id=post.id)
+    similar_post = similar_post.annotate(same_tags=Count('tags')).order_by('-same_tags')[:2]
+    context = {
+        'post': post,
+        'similar_post': similar_post,
+    }
+    return render(request, 'social/detail.html', context)
