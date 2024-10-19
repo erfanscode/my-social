@@ -5,7 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.conf import settings
 from taggit.models import Tag
-from django.db.models import Count
+from django.db.models import Count, Q
+
 
 from social.forms import UserRegistrationForm, UserEditForm, TicketForm, CreatePostForm
 from social.models import Post
@@ -99,3 +100,17 @@ def post_detail(request, pk):
         'similar_post': similar_post,
     }
     return render(request, 'social/detail.html', context)
+
+def post_search(request):
+    query = None
+    results = []
+    if 'query' in request.GET:
+        form = SearchForm(data=request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            results = Post.objects.filter(Q(tags__icontains=query) | Q(description__icontains=query))
+    context = {
+        'query': query,
+        'results': results,
+    }
+    return render(request, 'social/search.html', context)
