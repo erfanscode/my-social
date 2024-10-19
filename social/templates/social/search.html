@@ -1,10 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'parent/base.html' %}
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+
+    {% if query %}
+        <h4>{{ query }} :نتایح برای </h4>
+    {% endif %}
+
+    {% for post in results %}
+        <a href="{{ post.get_absolute_url }}">{{ post.description|truncatewords:10 }}</a>
+    {% empty %}
+        <h4>نتیجه ای یافت نشد</h4>
+    {% endfor %}
+
+{% endblock %}
