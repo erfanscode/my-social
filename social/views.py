@@ -8,7 +8,13 @@ from taggit.models import Tag
 from django.db.models import Count, Q
 
 
-from social.forms import UserRegistrationForm, UserEditForm, TicketForm, CreatePostForm
+from social.forms import (
+    UserRegistrationForm,
+    UserEditForm,
+    TicketForm,
+    CreatePostForm,
+    SearchForm
+)
 from social.models import Post
 
 
