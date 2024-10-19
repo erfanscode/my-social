@@ -114,7 +114,7 @@ def post_search(request):
         form = SearchForm(data=request.GET)
         if form.is_valid():
             query = form.cleaned_data['query']
-            results = Post.objects.filter(Q(tags__icontains=query) | Q(description__icontains=query))
+            results = Post.objects.filter(Q(tags__name__icontains=query) | Q(description__icontains=query))
     context = {
         'query': query,
         'results': results,
