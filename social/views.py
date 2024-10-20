@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
 from django.http.response import HttpResponse
+from django.views.decorators.http import require_POST
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
@@ -108,6 +110,7 @@ def post_detail(request, pk):
     return render(request, 'social/detail.html', context)
 
 def post_search(request):
+    # view for search posts
     query = None
     results = []
     if 'query' in request.GET:
@@ -120,3 +123,28 @@ def post_search(request):
         'results': results,
     }
     return render(request, 'social/search.html', context)
+
+@login_required
+@require_POST
+def like_post(request):
+    # view for like and unlike posts
+    post_id = request.POST.get('post_id')
+    if post_id is not None:
+        post = get_object_or_404(Post, id=post_id)
+        user = request.user
+
+        if user in post.likes.all():
+            post.likes.remove(user)
+            liked = False
+        else:
+            post.likes.add(user)
+            liked = True
+
+        post_likes_count = post.likes.count()
+        response_data = {
+            'liked': liked,
+            'post_likes_count': post_likes_count
+        }
+    else:
+        response_data = {'error': 'Invalid post_id'}
+    return JsonResponse(response_data)
