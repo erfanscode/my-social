@@ -130,7 +130,7 @@ def like_post(request):
     # view for like and unlike posts
     post_id = request.POST.get('post_id')
     if post_id is not None:
-        post = get_object_or_404(Post, id=post_id)
+        post = get_object_or_404(Post, pk=post_id)
         user = request.user
 
         if user in post.likes.all():
