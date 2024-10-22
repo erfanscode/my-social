@@ -8,6 +8,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from taggit.models import Tag
 from django.db.models import Count, Q
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 from social.forms import (
@@ -76,6 +77,16 @@ def post_list(request, tag_slug=None):
     if tag_slug:
         tag = Tag.objects.get(slug=tag_slug)
         posts = Post.objects.filter(tags__in=[tag])
+    page = request.GET.get('page')
+    paginator = Paginator(posts, 2)
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = []
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return render(request, 'social/list_ajax.html', {"posts": posts})
     context = {
         'posts': posts,
         'tag': tag,
