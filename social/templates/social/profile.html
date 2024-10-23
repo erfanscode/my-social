@@ -1,0 +1,19 @@
+{% extends 'parent/base.html' %}
+{% block title %}{{ user.username }}{% endblock %}
+
+{% block content %}
+
+    <h4>پست های ذخیره شده</h4>
+
+    <ul>
+        {% for post in saved_posts %}
+            <a href="{{ post.get_absolute_url }}">
+                {{ post.description|truncatewords:10 }}
+            </a>
+            <p>توسط در تاریخ منتشر شد {{ post.create }}{{ post.author }}</p>
+            <br>
+            <hr>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

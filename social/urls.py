@@ -7,6 +7,7 @@ app_name = 'social'
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('profile/', views.profile, name='profile'),
     path('login/', auth_view.LoginView.as_view(), name='login'),
     path('logout/', views.log_out, name='logout'),
     path('register/', views.register, name='register'),
@@ -27,4 +28,5 @@ urlpatterns = [
     path("create_post/", views.create_post, name='create_post'),
     path("search/", views.post_search, name='post_search'),
     path("liked_post/", views.like_post, name='like_post'),
+    path("save_post/", views.save_post, name='save_post'),
 ]

@@ -24,6 +24,11 @@ from social.models import Post
 def index(request):
     return HttpResponse("شما با موفقیت وارد شدید")
 
+def profile(request):
+    user = request.user
+    saved_posts = user.saved_posts.all()
+    return render(request, 'social/profile.html', {'saved_posts': saved_posts})
+
 def log_out(request):
     logout(request)
     return HttpResponse("شما خارج شدید")
@@ -159,3 +164,20 @@ def like_post(request):
     else:
         response_data = {'error': 'Invalid post_id'}
     return JsonResponse(response_data)
+
+@login_required
+@require_POST
+def save_post(request):
+    # view for save and unsave posts
+    post_id = request.POST.get('post_id')
+    if post_id is not None:
+        post = get_object_or_404(Post, pk=post_id)
+        user = request.user
+        if user in post.saved_by.all():
+            post.saved_by.remove(user)
+            saved = False
+        else:
+            post.saved_by.add(user)
+            saved = True
+        return JsonResponse({'saved': saved})
+    return JsonResponse({'error': 'Invalid Request'})
