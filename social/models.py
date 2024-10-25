@@ -12,6 +12,7 @@ class User(AbstractUser):
     photo = models.ImageField(upload_to="account_images/", null=True, blank=True, verbose_name="تصویر")
     job = models.CharField(max_length=120, null=True, blank=True, verbose_name="شغل")
     phone = models.CharField(max_length=11, verbose_name="موبایل")
+    following = models.ManyToManyField('self', through='Contact', related_name='followers', symmetrical=False)
 
 
 class Post(models.Model):
@@ -37,3 +38,19 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('social:post_detail', args={self.id})
+
+
+class Contact(models.Model):
+    # Custom M2M Field
+    user_from = models.ForeignKey(User, related_name='rel_from_set', on_delete=models.CASCADE)
+    user_to = models.ForeignKey(User, related_name='rel_to_set', on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['-created']),
+        ]
+        ordering = ['-created']
+
+    def __str__(self):
+        return f'{self.user_from} following {self.user_to}'
