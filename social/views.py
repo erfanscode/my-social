@@ -27,7 +27,7 @@ def index(request):
 def profile(request):
     user = request.user
     saved_posts = user.saved_posts.all()
-    return render(request, 'social/profile.html', {'saved_posts': saved_posts})
+    return render(request, 'social/profile.html', {'saved_posts': saved_posts, 'user': user})
 
 def log_out(request):
     logout(request)

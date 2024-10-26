@@ -1,7 +1,19 @@
 {% extends 'parent/base.html' %}
+{% load thumbnail %}
+{% load static %}
 {% block title %}{{ user.username }}{% endblock %}
 
 {% block content %}
+    {% with user=request.user %}
+        <p>سلام {{ user.get_full_name }} عزیز</p>
+        {% if user.photo %}
+            <a href="{{ user.photo.url }}">
+                <img src="{% thumbnail user.photo 100x100 quality=80 %}">
+            </a>
+        {% else %}
+            <img src="{% static 'images/profile/765-default-avatar.png' %}" style="height: 100px; width: 100px;">
+        {% endif %}
+    {% endwith %}
 
     <h4>پست های ذخیره شده</h4>
 

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'taggit',
+    'easy_thumbnails',
 ]
 
 MIDDLEWARE = [
@@ -150,3 +151,7 @@ EMAIL_HOST_USER = 'djangotestmenow@gmail.com'
 EMAIL_HOST_PASSWORD = 'snoq cugh zjab okle'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+
+# EasyThumbnails config
+THUMBNAIL_DEBUG = True
