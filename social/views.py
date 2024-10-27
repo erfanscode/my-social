@@ -18,7 +18,7 @@ from social.forms import (
     CreatePostForm,
     SearchForm
 )
-from social.models import Post
+from social.models import Post, User
 
 
 def index(request):
@@ -181,3 +181,9 @@ def save_post(request):
             saved = True
         return JsonResponse({'saved': saved})
     return JsonResponse({'error': 'Invalid Request'})
+
+@login_required
+def user_list(request):
+    # view for show users list
+    users = User.objects.filter(is_active=True)
+    return render(request, "user/user_list.html", {"users": users})

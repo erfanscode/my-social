@@ -1,0 +1,21 @@
+{% extends 'parent/base.html' %}
+{% load thumbnail %}
+{% load static %}
+{% block title %}Users List{% endblock %}
+
+{% block content %}
+    {% for user in users %}
+        {% if user.photo %}
+            <a href="{{ user.photo.url }}">
+                <img src="{% thumbnail user.photo 100x100 quality=80 %}">
+            </a>
+        {% else %}
+            <img src="{% static 'images/profile/765-default-avatar.png' %}" style="height: 100px; width: 100px;">
+        {% endif %}
+
+        <a href="#">
+            <p>{{ user.username }}</p>
+        </a>
+    {% endfor %}
+
+{% endblock %}

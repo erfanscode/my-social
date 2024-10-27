@@ -29,4 +29,5 @@ urlpatterns = [
     path("search/", views.post_search, name='post_search'),
     path("liked_post/", views.like_post, name='like_post'),
     path("save_post/", views.save_post, name='save_post'),
+    path("user/", views.user_list, name='user_list'),
 ]
