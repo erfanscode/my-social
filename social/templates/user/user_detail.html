@@ -1,0 +1,28 @@
+{% extends 'parent/base.html' %}
+{% load thumbnail %}
+{% load static %}
+{% block title %}{{ user.username }}{% endblock %}
+
+{% block content %}
+    <p>پروفایل {{ user.get_full_name }}</p>
+
+    <button>Follow/Unfollow</button>
+    <br><br>
+    {% if user.photo %}
+        <a href="{{ user.photo.url }}">
+            <img src="{% thumbnail user.photo 100x100 quality=80 %}">
+        </a>
+    {% else %}
+        <img src="{% static 'images/profile/765-default-avatar.png' %}" style="height: 100px; width: 100px;">
+    {% endif %}
+
+    <p> بیو: {{ user.bio|default:'وارد نشده'}}</p>
+    <p> شغل: {{ user.job|default:'وارد نشده'}}</p>
+    <p> تاریخ تولد: {{ user.date_of_birth|default:'وارد نشده'}}</p>
+
+    {% with total_followers=user.followers.count total_followings=user.following.count %}
+        <p>{{ total_followers }} دنبال کننده</p>
+        <p>{{ total_followings }} دنبال شونده</p>
+    {% endwith %}
+
+{% endblock %}

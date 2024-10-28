@@ -187,3 +187,9 @@ def user_list(request):
     # view for show users list
     users = User.objects.filter(is_active=True)
     return render(request, "user/user_list.html", {"users": users})
+
+@login_required
+def user_detail(request, username):
+    # view for show user detail
+    user = get_object_or_404(User, username=username, is_active=True)
+    return render(request, "user/user_detail.html", {"user": user})
