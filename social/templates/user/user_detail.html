@@ -6,7 +6,20 @@
 {% block content %}
     <p>پروفایل {{ user.get_full_name }}</p>
 
-    <button>Follow/Unfollow</button>
+    {% if request.user == user %}
+    	<button disabled>
+            follow
+        </button>
+    {% else %}
+        <button class="follow-button">
+            {% if request.user in user.followers.all %}
+            	Unfollow
+            {% else %}
+                Follow
+            {% endif %}
+        </button>
+    {% endif %}
+
     <br><br>
     {% if user.photo %}
         <a href="{{ user.photo.url }}">
@@ -20,9 +33,38 @@
     <p> شغل: {{ user.job|default:'وارد نشده'}}</p>
     <p> تاریخ تولد: {{ user.date_of_birth|default:'وارد نشده'}}</p>
 
-    {% with total_followers=user.followers.count total_followings=user.following.count %}
-        <p>{{ total_followers }} دنبال کننده</p>
-        <p>{{ total_followings }} دنبال شونده</p>
+    {% with total_followers=user.followers.count total_following=user.following.count %}
+        <span class="followers-count">{{ total_followers }} دنبال کننده</span>
+        <br>
+        <span class="following-count">{{ total_following }} دنبال شونده</span>
     {% endwith %}
+
+{% endblock %}
+
+{% block script %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    $(document).ready(function() {
+        $('.follow-button').click(function() {
+            var button = $(this);
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'social:user_follow' %}",
+                data: {'id': '{{ user.id }}', 'csrfmiddlewaretoken': '{{ csrf_token }}' },
+                success: function(data){
+                    if (data.follow) {
+                        button.text('Unfollow');
+                    } else {
+                        button.text('Follow');
+                    }
+                    $('.followers-count').text(data.followers_count + ' دنبال کننده ');
+                    $('.following-count').text(data.following_count + ' دنبال شونده ');
+                }
+            });
+        });
+    });
+</script>
 
 {% endblock %}
