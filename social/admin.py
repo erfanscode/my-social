@@ -17,3 +17,6 @@ class PostAdmin(admin.ModelAdmin):
     # Show user posts
     list_display = ['description', 'create']
     search_fields = ['description', 'tags']
+
+
+admin.site.register(Contact)
