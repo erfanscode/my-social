@@ -26,12 +26,14 @@ class Post(models.Model):
     update = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(User, related_name="liked_post", blank=True)
     saved_by = models.ManyToManyField(User, related_name="saved_posts", blank=True)
+    total_likes = models.PositiveIntegerField(default=0)
     tags = TaggableManager()
 
     class Meta:
         ordering = ['-create']
         indexes = [
             models.Index(fields=['-create']),
+            models.Index(fields=['-total_likes']),
         ]
         verbose_name = 'پست'
         verbose_name_plural = 'پست ها'

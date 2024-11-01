@@ -77,7 +77,7 @@ def ticket(request):
 
 def post_list(request, tag_slug=None):
     # view for show list posts
-    posts = Post.objects.select_related('author').all()
+    posts = Post.objects.select_related('author').order_by('-total_likes')
     tag = None
     if tag_slug:
         tag = Tag.objects.get(slug=tag_slug)
