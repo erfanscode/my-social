@@ -25,7 +25,7 @@ def index(request):
     return HttpResponse("شما با موفقیت وارد شدید")
 
 def profile(request):
-    user = request.user
+    user = User.objects.prefetch_related('followers', 'following').get(id=request.user.id)
     saved_posts = user.saved_posts.all()
     return render(request, 'social/profile.html', {'saved_posts': saved_posts, 'user': user})
 
@@ -77,7 +77,7 @@ def ticket(request):
 
 def post_list(request, tag_slug=None):
     # view for show list posts
-    posts = Post.objects.all()
+    posts = Post.objects.select_related('author').all()
     tag = None
     if tag_slug:
         tag = Tag.objects.get(slug=tag_slug)
