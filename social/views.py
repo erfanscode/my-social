@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.http.response import HttpResponse
 from django.views.decorators.http import require_POST
+from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
@@ -58,7 +59,6 @@ def edit_user(request):
 
 def ticket(request):
     # view for send ticket to mail
-    sent = False
     if request.method == 'POST':
         form = TicketForm(request.POST)
         if form.is_valid():
@@ -70,10 +70,10 @@ def ticket(request):
                 ['djangotestmenow@gmail.com'],
                 fail_silently=False
             )
-            sent = True
+            messages.success(request, 'تیکت شما با موفقیت ارسال شد')
     else:
         form = TicketForm()
-    return render(request, 'forms/ticket.html', {"form": form, "sent": sent})
+    return render(request, 'forms/ticket.html', {"form": form})
 
 def post_list(request, tag_slug=None):
     # view for show list posts
