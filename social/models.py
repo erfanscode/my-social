@@ -24,6 +24,7 @@ class Post(models.Model):
     description = models.TextField(verbose_name='متن')
     create = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
     likes = models.ManyToManyField(User, related_name="liked_post", blank=True)
     saved_by = models.ManyToManyField(User, related_name="saved_posts", blank=True)
     total_likes = models.PositiveIntegerField(default=0)
